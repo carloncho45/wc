@@ -11,7 +11,6 @@ import com.waytruck.cargo.R
 import com.waytruck.cargo.databinding.ActivitySplashBinding
 import com.waytruck.cargo.ui.home.MainActivity
 import com.waytruck.cargo.ui.login.LoginActivity
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

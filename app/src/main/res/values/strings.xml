@@ -6,5 +6,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
   <string name="cotiza_en_minutos">En WAY Cargo, conectamos clientes y transportistas para brindarte un servicio de transporte eficiente, seguro y sin complicaciones. Desde pequeñas cargas hasta frandes mundanzas, nos encargamos de gestionar tu carga para que llegue a su destino de manera rápida y segura</string>
+    <string name="order_confirmation">Necesitas actualizar la versión del applicativo</string>
+    <string name="ok">Si</string>
 
 </resources>

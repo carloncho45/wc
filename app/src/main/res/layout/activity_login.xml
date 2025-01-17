@@ -5,10 +5,12 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+
+
     <ImageButton
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="20dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginBottom="70dp"
         android:background="@drawable/logo_blue"
         app:layout_constraintBottom_toTopOf="@+id/lnlogin"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,11 +52,11 @@
                 android:layout_height="match_parent"
                 android:clickable="true"
                 android:duplicateParentState="true"
-                android:fontFamily="@font/helvetica"
+                android:fontFamily="@font/montserrat_black"
                 android:gravity="center"
                 android:text="Login con google"
                 android:textColor="@color/blue"
-                android:textSize="22sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -79,13 +81,13 @@
                 android:id="@+id/txt_login_anonimo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_black"
                 android:clickable="true"
                 android:duplicateParentState="true"
-                android:fontFamily="@font/helvetica"
                 android:gravity="center"
                 android:text="Ir sin registro"
                 android:textColor="@color/blue"
-                android:textSize="22sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 

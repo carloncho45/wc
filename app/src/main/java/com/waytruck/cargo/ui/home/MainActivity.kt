@@ -6,44 +6,59 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.nucleoti.lumicenter.ui.utils.PreferencesController
+import com.waytruck.cargo.BuildConfig
 import com.waytruck.cargo.R
 import com.waytruck.cargo.databinding.ActivityMainBinding
+import com.waytruck.cargo.firebase.FirebaseInstance
 import com.waytruck.cargo.slider.IndicatorView.animation.type.IndicatorAnimationType
 import com.waytruck.cargo.slider.SliderAdapterExample
 import com.waytruck.cargo.slider.SliderAnimations
-import com.waytruck.cargo.slider.SliderItem
 import com.waytruck.cargo.slider.SliderView
+import com.waytruck.cargo.ui.formcotizacion.CotizacionActivity
+import com.waytruck.cargo.ui.login.LoginActivity
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    val phoneNumber = "+51928401266"
-    val message = "Hola, necesito información"
+
 
     private var adapter: SliderAdapterExample? = null
     private lateinit var auth: FirebaseAuth
-
+    val firebaseInstance = FirebaseInstance()
+    var preferencesController: PreferencesController? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        firebaseInstance.updateContext(this)
+
         FirebaseApp.initializeApp(this)
         auth = Firebase.auth
+
         setSupportActionBar(binding.toolbar)
+
+        getSupportActionBar()!!.setDisplayShowTitleEnabled(false);
+        preferencesController = PreferencesController(this)
+
         loginAnonymous()
         binding.toolbar.title = ""
-        getSupportActionBar()!!.setDisplayShowTitleEnabled(false);
-
+        collectVersionApp()
+        collectSettings()
+        //  firebaseInstance.getSettings()
         statusBar()
         initViewAccion()
 
@@ -51,8 +66,46 @@ class MainActivity : AppCompatActivity() {
         binding.includedLayout.imageSlider.setOnIndicatorClickListener {
 
         }
+    }
 
-        renewItems()
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    private fun collectSettings() {
+        // Usa el lifecycleScope para colectar el Flow
+        lifecycleScope.launch {
+            firebaseInstance.getSettings().collect { settingsList ->
+                // Aquí puedes manejar los datos obtenidos
+                renewItems(settingsList)
+            }
+        }
+    }
+
+    private fun collectVersionApp() {
+        // Usa el lifecycleScope para colectar el Flow
+        lifecycleScope.launch {
+            firebaseInstance.getVersionApp().collect { version ->
+                // Aquí puedes manejar los datos obtenidos
+
+                if (version > BuildConfig.VERSION_CODE) {
+                    val dialogFragment = PurchaseConfirmationDialogFragment()
+                    dialogFragment.show(
+                        supportFragmentManager,
+                        PurchaseConfirmationDialogFragment.TAG
+                    )
+                }
+
+            }
+        }
+    }
+
+    fun goToUpdate() {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse("market://details?id=com.waytruck.cargo")
+        //  intent.data = Uri.parse(preferencesController.getLinkUpdateApp())
+        startActivity(intent)
 
     }
 
@@ -67,25 +120,28 @@ class MainActivity : AppCompatActivity() {
                 0,
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
             )
-            window.statusBarColor = ContextCompat.getColor(this, R.color.yellow)
+            window.statusBarColor = ContextCompat.getColor(this, R.color.dark_primary_color)
         } else {
-            window.statusBarColor = ContextCompat.getColor(this, R.color.yellow)
+            window.statusBarColor = ContextCompat.getColor(this, R.color.dark_primary_color)
         }
     }
 
     fun initViewAccion() {
         binding.fab.setOnClickListener {
-            try {
-                val sendIntent = Intent(Intent.ACTION_VIEW)
-                val uri = "whatsapp://send?phone=$phoneNumber&text=$message"
-                sendIntent.data = Uri.parse(uri)
-                startActivity(sendIntent)
-            } catch (e: Exception) {
-                Toast.makeText(this, "WhatsApp no está instalado", Toast.LENGTH_SHORT).show()
-            }
 
+            startCotizacion()
+        }
+        binding.imgLogout.setOnClickListener {
+            logout()
         }
     }
+
+    fun startCotizacion(){
+        val intent = Intent(this@MainActivity, CotizacionActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
 
     fun loginAnonymous() {
         auth.signInAnonymously()
@@ -123,32 +179,22 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun renewItems() {
-        val sliderItemList: MutableList<SliderItem> = ArrayList()
+    fun renewItems(images: List<String>) {
+        val sliderItemList: MutableList<String> = ArrayList()
         //dummy data
-        for (i in 0..2) {
-            val sliderItem = SliderItem()
-            //sliderItem.description = "Slider Item $i"
-            when (i) {
-                0 -> {
-                    sliderItem.imageUrl =
-                        "https://firebasestorage.googleapis.com/v0/b/lumistore-65d9b.appspot.com/o/img_4.jpg?alt=media&token=cb7d100b-4296-471e-8d45-201e4e4c8088"
-                }
+        adapter!!.renewItems(images)
+    }
 
-                1 -> {
-                    sliderItem.imageUrl =
-                        "https://firebasestorage.googleapis.com/v0/b/lumistore-65d9b.appspot.com/o/img_5.jpg?alt=media&token=6a9062b2-8423-43e9-968c-133ac2ab4b3e"
-                }
+    fun logout() {
+        auth.signOut()
+        preferencesController!!.deletePreferences()
+        starLogin()
+    }
 
-                2 -> {
-                    sliderItem.imageUrl =
-                        "https://firebasestorage.googleapis.com/v0/b/lumistore-65d9b.appspot.com/o/img_6.jpg?alt=media&token=5f4010a0-ff79-4669-98da-9c8a23cad9ce"
-                }
-            }
-
-            sliderItemList.add(sliderItem)
-        }
-        adapter!!.renewItems(sliderItemList)
+    fun starLogin() {
+        val intent = Intent(this@MainActivity, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     fun removeLastItem(view: View?) {
@@ -156,9 +202,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun addNewItem(view: View?) {
-        val sliderItem = SliderItem()
-        sliderItem.description = "Slider Item Added Manually"
-        sliderItem.imageUrl =
+        val sliderItem =
             "https://images.pexels.com/photos/929778/pexels-photo-929778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
         adapter!!.addItem(sliderItem)
     }

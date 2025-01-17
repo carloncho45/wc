@@ -3,11 +3,14 @@ package com.waytruck.cargo.ui.login
 import android.R
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -57,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
         preferencesController = PreferencesController(this)
 
         initViewAccion()
+        statusBar()
     }
 
     fun sigInGoogle() {
@@ -118,7 +122,10 @@ class LoginActivity : AppCompatActivity() {
         binding.txtLoginAnonimo.setOnClickListener {
             loginAnonymous()
         }
+
     }
+
+
 
     fun loginAnonymous() {
         auth.signInAnonymously()
@@ -145,4 +152,20 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
+    fun statusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.setSystemBarsAppearance(
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
+            window.setDecorFitsSystemWindows(false)
+            window.insetsController?.setSystemBarsAppearance(
+                0,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
+            window.statusBarColor = ContextCompat.getColor(this, com.waytruck.cargo.R.color.white)
+        } else {
+            window.statusBarColor = ContextCompat.getColor(this, com.waytruck.cargo.R.color.white)
+        }
+    }
 }

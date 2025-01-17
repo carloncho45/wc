@@ -33,6 +33,10 @@
             android:name=".ui.login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.Waytruck" />
+        <activity
+            android:name=".ui.formcotizacion.CotizacionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.Theme.Waytruck" />
     </application>
 
 </manifest>

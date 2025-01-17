@@ -19,13 +19,13 @@ public class SliderAdapterExample extends
         SliderViewAdapter<SliderAdapterExample.SliderAdapterVH> {
 
     private Context context;
-    private List<SliderItem> mSliderItems = new ArrayList<>();
+    private List<String> mSliderItems = new ArrayList<>();
 
     public SliderAdapterExample(Context context) {
         this.context = context;
     }
 
-    public void renewItems(List<SliderItem> sliderItems) {
+    public void renewItems(List<String> sliderItems) {
         this.mSliderItems = sliderItems;
         notifyDataSetChanged();
     }
@@ -35,7 +35,7 @@ public class SliderAdapterExample extends
         notifyDataSetChanged();
     }
 
-    public void addItem(SliderItem sliderItem) {
+    public void addItem(String sliderItem) {
         this.mSliderItems.add(sliderItem);
         notifyDataSetChanged();
     }
@@ -49,17 +49,17 @@ public class SliderAdapterExample extends
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, final int position) {
 
-        SliderItem sliderItem = mSliderItems.get(position);
+        String sliderItem = mSliderItems.get(position);
 
-        viewHolder.textViewDescription.setText(sliderItem.getDescription());
+        //  viewHolder.textViewDescription.setText(sliderItem.getDescription());
         viewHolder.textViewDescription.setTextSize(16);
         viewHolder.textViewDescription.setTextColor(Color.WHITE);
         Glide.with(viewHolder.itemView)
-                .load(sliderItem.getImageUrl())
+                .load(sliderItem)
                 .fitCenter()
                 .into(viewHolder.imageViewBackground);
 
-        viewHolder.itemView.setOnClickListener(v -> Toast.makeText(context, "This is item in position " + position, Toast.LENGTH_SHORT).show());
+       // viewHolder.itemView.setOnClickListener(v -> Toast.makeText(context, "This is item in position " + position, Toast.LENGTH_SHORT).show());
     }
 
     @Override

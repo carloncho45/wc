@@ -21,27 +21,47 @@
             android:background="@color/yellow"
             app:title="">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center|left"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/img_toolbar"
                     android:layout_width="53dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/logo_yellow" />
+                    android:src="@drawable/logo_yellow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/img_toolbar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
                     android:layout_marginLeft="20dp"
-                    android:fontFamily="@font/helvetica_bold"
+                    android:fontFamily="@font/helveticacompressed"
                     android:text="Way Cargo"
-                    android:textColor="@color/black"
-                    android:textSize="22dp" />
-            </LinearLayout>
+                    android:textColor="@color/blue"
+                    android:textSize="22dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/img_toolbar"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/img_logout"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:visibility="gone"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/baseline_logout_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -50,15 +70,21 @@
         android:id="@+id/includedLayout"
         layout="@layout/content_main" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="80dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:elevation="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="bottom|right"
-        android:layout_height="80dp"
-        android:background="@drawable/icons8_whatsapp_144" />
+        android:contentDescription="cotizar"
+        android:layout_marginEnd="20dp"
+        android:text="COTIZAR"
+        android:textSize="16sp"
+        android:fontFamily="@font/montserrat_regular"
+        android:layout_marginBottom="20dp"
+        app:icon="@drawable/ic_add"
+        style="@style/CustomExtendedFAB"
+        android:elevation="5dp" >
+    </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
